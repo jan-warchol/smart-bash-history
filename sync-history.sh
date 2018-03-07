@@ -5,8 +5,12 @@ export HISTSIZE=100000
 export HISTCONTROL=ignoreboth
 shopt -s histappend   # don't overwrite history file after each session
 # I prefer to keep my history in my data folder so that it's backed up
-export HISTFILE="$HOME/data/bash-history-$DISAMBIG_SUFFIX"
+export HISTFILE="$HOME/data/history/bash-history-$DISAMBIG_SUFFIX"
 export HISTTIMEFORMAT="%d/%m/%y %T "
+
+# start by making a backup
+cp --backup $HISTFILE $HISTFILE.backup~
+mkdir -p `dirname $HISTFILE`
 
 # write session history to dedicated file and sync with other sessions, always
 # keeping history from current session on top.
