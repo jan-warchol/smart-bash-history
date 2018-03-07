@@ -34,3 +34,19 @@ merge_history () {
 export PROMPT_COMMAND='update_history'
 trap merge_history EXIT
 
+active_shells=`pgrep -f "$0"`
+grep_pattern=`for pid in $active_shells; do echo -n "-e \.${pid}\$ "; done`
+orphaned_files=`ls $HISTFILE.[0-9]* | grep -v $grep_pattern`
+
+if [ -n "$orphaned_files" ]; then
+  echo Orphaned history files:
+  echo $orphaned_files
+  echo -n Merging orphaned history files...
+
+  for f in $orphaned_files; do
+    cat $f >> $HISTFILE
+    rm $f
+  done
+
+  echo " done."
+fi
