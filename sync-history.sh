@@ -36,17 +36,14 @@ trap merge_history EXIT
 
 active_shells=`pgrep -f "$0"`
 grep_pattern=`for pid in $active_shells; do echo -n "-e \.${pid}\$ "; done`
-orphaned_files=`ls $HISTFILE.[0-9]* | grep -v $grep_pattern`
+orphaned_files=`ls $HISTFILE.[0-9]* 2>/dev/null | grep -v $grep_pattern`
 
 if [ -n "$orphaned_files" ]; then
-  echo Orphaned history files:
-  echo $orphaned_files
-  echo -n Merging orphaned history files...
-
+  echo Merging orphaned history files:
   for f in $orphaned_files; do
+    echo "  `basename $f`"
     cat $f >> $HISTFILE
     rm $f
   done
-
-  echo " done."
+  echo "done."
 fi
