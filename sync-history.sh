@@ -8,9 +8,10 @@ shopt -s histappend   # don't overwrite history file after each session
 export HISTFILE="$HOME/data/history/bash-history-$DISAMBIG_SUFFIX"
 export HISTTIMEFORMAT="%d/%m/%y %T "
 
-# start by making a backup
-cp --backup $HISTFILE $HISTFILE.backup~
+# ensure we have necessary dirs and a backup not older than an hour
 mkdir -p `dirname $HISTFILE`
+[ -z `find $HISTFILE.backup~ -mmin -60 2>/dev/null` ] &&
+  cp --backup $HISTFILE $HISTFILE.backup~
 
 # write session history to dedicated file and sync with other sessions, always
 # keeping history from current session on top.
