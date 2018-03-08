@@ -22,7 +22,7 @@ update_history () {
 
   history -c
   history -r
-  for f in ${HISTFILE}.*; do
+  for f in ${HISTFILE}.[0-9]*; do
     if [ $f != ${HISTFILE}.$$ ]; then
       history -r $f
     fi
