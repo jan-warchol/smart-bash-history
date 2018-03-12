@@ -17,8 +17,8 @@ split_history_file () {
   echo "Archiving old bash history for better performance..."
   archive_file="$HISTFILE.archive.$(date +%F.%H:%M:%S)"
   split -n "l/2" "$HISTFILE" "$HISTFILE.split_"
-  mv "$HISTFILE.split_aa" "$archive_file"
-  mv "$HISTFILE.split_ab" "$HISTFILE"
+  mv --backup "$HISTFILE.split_aa" "$archive_file"
+  mv --backup "$HISTFILE.split_ab" "$HISTFILE"
   echo -n $(sed '/^#[0-9]\+$/d' "$archive_file" | wc | awk '{print $1}')
   echo " entries archived to `basename $archive_file`"
   echo $(sed '/^#[0-9]\+$/d' "$HISTFILE" | wc | awk '{print $1}') entries remaining.
