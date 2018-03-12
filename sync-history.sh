@@ -45,13 +45,13 @@ update_history () {
 }
 
 # merge into main history file on bash exit (see trap below)
-merge_history () {
+merge_session_history () {
   cat ${HISTFILE}.$$ >> $HISTFILE
   rm ${HISTFILE}.$$
 }
 
 export PROMPT_COMMAND='update_history'
-trap merge_history EXIT
+trap merge_session_history EXIT
 
 active_shells=`pgrep -f "$0"`
 grep_pattern=`for pid in $active_shells; do echo -n "-e \.${pid}\$ "; done`
