@@ -14,15 +14,12 @@ export HISTTIMEFORMAT="%F %T "
 # by reading all files, always keeping history from current session on top.
 update_history () {
   history -a ${HISTFILE}.$$
-
   history -c
   history -r
-  for f in ${HISTFILE}.[0-9]*; do
-    if [ $f != ${HISTFILE}.$$ ]; then
-      history -r $f
-    fi
+  for f in `ls ${HISTFILE}.[0-9]* | grep -v "${HISTFILE}.$$\$"`; do
+    history -r $f
   done
-  history -r ${HISTFILE}.$$
+  history -r "${HISTFILE}.$$"
 }
 export PROMPT_COMMAND='update_history'
 
