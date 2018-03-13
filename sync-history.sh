@@ -10,29 +10,13 @@ export HISTTIMEFORMAT="%F %T "
 [ -z `find $HISTFILE.backup~ -mmin -60 2>/dev/null` ] &&
   cp --backup $HISTFILE $HISTFILE.backup~
 
-split_history_file () {
-  echo "Archiving old bash history for better performance..."
-  archive_file="$HISTFILE.archive.$(date +%F.%H:%M:%S)"
-  split -n "l/2" "$HISTFILE" "$HISTFILE.split_"
-  mv --backup "$HISTFILE.split_aa" "$archive_file"
-  mv --backup "$HISTFILE.split_ab" "$HISTFILE"
-  echo -n $(sed '/^#[0-9]\+$/d' "$archive_file" | wc | awk '{print $1}')
-  echo " entries archived to `basename $archive_file`"
-  echo $(sed '/^#[0-9]\+$/d' "$HISTFILE" | wc | awk '{print $1}') entries remaining.
-}
-
-# write session history to dedicated file and sync with other sessions, always
-# keeping history from current session on top.
-# Note that HISTFILESIZE shouldn't be too big, or there will be a noticeable
-# delay. A value of 100000 seems to work reasonable.
+# on every prompt, save new history to dedicated file and recreate full history
+# by reading all files, always keeping history from current session on top.
 update_history () {
   history -a ${HISTFILE}.$$
 
-  begin=$(date +%s.%N)
   history -c
   history -r
-  end=$(date +%s.%N)
-  ((`echo "$end - $begin > .1" | bc`)) && split_history_file
   for f in ${HISTFILE}.[0-9]*; do
     if [ $f != ${HISTFILE}.$$ ]; then
       history -r $f
@@ -40,16 +24,16 @@ update_history () {
   done
   history -r ${HISTFILE}.$$
 }
+export PROMPT_COMMAND='update_history'
 
 # merge into main history file on bash exit (see trap below)
 merge_session_history () {
   cat ${HISTFILE}.$$ >> $HISTFILE
   rm ${HISTFILE}.$$
 }
-
-export PROMPT_COMMAND='update_history'
 trap merge_session_history EXIT
 
+# detect leftover files from crashed sessions and merge them back
 active_shells=`pgrep -f "$0"`
 grep_pattern=`for pid in $active_shells; do echo -n "-e \.${pid}\$ "; done`
 orphaned_files=`ls $HISTFILE.[0-9]* 2>/dev/null | grep -v $grep_pattern`
@@ -63,3 +47,18 @@ if [ -n "$orphaned_files" ]; then
   done
   echo "done."
 fi
+
+# split history file if updating history takes more than 0.1 s
+split_history_file () {
+  echo "Archiving old bash history for better performance..."
+  archive_file="$HISTFILE.archive.$(date +%F.%H:%M:%S)"
+  split -n "l/2" "$HISTFILE" "$HISTFILE.split_"
+  mv --backup "$HISTFILE.split_aa" "$archive_file"
+  mv --backup "$HISTFILE.split_ab" "$HISTFILE"
+  # exclude timestamp comments when summarizing split
+  echo -n $(sed '/^#[0-9]\+$/d' "$archive_file" | wc | awk '{print $1}')
+  echo " entries archived to `basename $archive_file`"
+  echo $(sed '/^#[0-9]\+$/d' "$HISTFILE" | wc | awk '{print $1}') entries remaining.
+}
+begin=$(date +%s.%N); update_history; end=$(date +%s.%N)
+((`echo "$end - $begin > .1" | bc`)) && split_history_file
