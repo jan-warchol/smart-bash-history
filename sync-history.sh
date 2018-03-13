@@ -6,7 +6,7 @@ export HISTCONTROL=ignoreboth
 shopt -s histappend   # don't overwrite history file after each session
 # I prefer to keep my history in my data folder so that it's backed up
 export HISTFILE="$HOME/data/history/bash-history-$DISAMBIG_SUFFIX"
-export HISTTIMEFORMAT="%d/%m/%y %T "
+export HISTTIMEFORMAT="%F %T "
 
 # ensure we have necessary dirs and a backup not older than an hour
 mkdir -p `dirname $HISTFILE`
