@@ -4,12 +4,9 @@ export HISTFILESIZE=-1
 export HISTSIZE=-1
 export HISTCONTROL=ignoreboth
 shopt -s histappend   # don't overwrite history file after each session
-# I prefer to keep my history in my data folder so that it's backed up
-export HISTFILE="$HOME/data/history/bash-history-$DISAMBIG_SUFFIX"
 export HISTTIMEFORMAT="%F %T "
 
-# ensure we have necessary dirs and a backup not older than an hour
-mkdir -p `dirname $HISTFILE`
+# ensure we have a backup that is not older than an hour, just in case
 [ -z `find $HISTFILE.backup~ -mmin -60 2>/dev/null` ] &&
   cp --backup $HISTFILE $HISTFILE.backup~
 
