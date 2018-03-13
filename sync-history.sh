@@ -1,8 +1,9 @@
 
-# shell history is very useful; keep many months of history
+# keep unlimited shell history because it's very useful
 export HISTFILESIZE=-1
 export HISTSIZE=-1
-export HISTCONTROL=ignoreboth
+
+export HISTCONTROL=ignoreboth   # ignore duplicates and commands starting with space
 shopt -s histappend   # don't overwrite history file after each session
 export HISTTIMEFORMAT="%F %T "
 
@@ -23,7 +24,7 @@ update_history () {
 }
 export PROMPT_COMMAND='update_history'
 
-# merge into main history file on bash exit (see trap below)
+# merge session history into main history file on bash exit
 merge_session_history () {
   cat ${HISTFILE}.$$ >> $HISTFILE
   rm ${HISTFILE}.$$
