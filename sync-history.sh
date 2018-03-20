@@ -2,10 +2,7 @@
 # keep unlimited shell history because it's very useful
 export HISTFILESIZE=-1
 export HISTSIZE=-1
-
-export HISTCONTROL=ignoreboth   # ignore duplicates and commands starting with space
 shopt -s histappend   # don't overwrite history file after each session
-export HISTTIMEFORMAT="%F %T "
 
 # ensure we have a backup that is not older than an hour, just in case
 [ -z `find $HISTFILE.backup~ -mmin -60 2>/dev/null` ] &&
