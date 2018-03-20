@@ -1,3 +1,12 @@
+# Synchronize history between bash sessions
+#
+# Make history from other terminals available to the current one. However,
+# don't mix all histories together - make sure that *all* commands from the
+# current session are on top of its history, so that pressing up arrow will
+# give you most recent command from this session, not from any session.
+#
+# Since history is saved on each prompt, this additionally protects it from
+# terminal crashes.
 
 # keep unlimited shell history because it's very useful
 export HISTFILESIZE=-1
