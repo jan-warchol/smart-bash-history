@@ -17,7 +17,7 @@ update_history () {
   history -a ${HISTFILE}.$$
   history -c
   history -r
-  for f in `ls ${HISTFILE}.[0-9]* | grep -v "${HISTFILE}.$$\$"`; do
+  for f in `ls ${HISTFILE}.[0-9]* 2>/dev/null | grep -v "${HISTFILE}.$$\$"`; do
     history -r $f
   done
   history -r "${HISTFILE}.$$"
