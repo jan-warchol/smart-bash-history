@@ -28,7 +28,7 @@ update_history () {
   done
   history -r "${HISTFILE}.$$"
 }
-export PROMPT_COMMAND='update_history'
+export PROMPT_COMMAND="update_history; $PROMPT_COMMAND"
 
 # merge session history into main history file on bash exit
 merge_session_history () {
