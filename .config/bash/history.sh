@@ -7,6 +7,12 @@ export HISTIGNORE="?:cd:-:..:ls:ll:bg:fg:vim:cim:g:g s:g d:g-"
 # disable terminal flow control key binding, so that ^S will search history forward
 stty -ixon
 
+# keep unlimited shell history because it's very useful
+export HISTFILESIZE=-1
+export HISTSIZE=-1
+shopt -s histappend   # don't overwrite history file after each session
+
+
 # Synchronize history between bash sessions
 #
 # Make history from other terminals available to the current one. However,
@@ -16,11 +22,6 @@ stty -ixon
 #
 # Since history is saved on each prompt, this additionally protects it from
 # terminal crashes.
-
-# keep unlimited shell history because it's very useful
-export HISTFILESIZE=-1
-export HISTSIZE=-1
-shopt -s histappend   # don't overwrite history file after each session
 
 # ensure we have a backup that is not older than an hour, just in case
 [ -z `find $HISTFILE.backup~ -mmin -60 2>/dev/null` ] &&
