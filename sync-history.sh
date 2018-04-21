@@ -15,7 +15,7 @@ shopt -s histappend   # don't overwrite history file after each session
 
 # ensure we have a backup that is not older than an hour, just in case
 [ -z `find $HISTFILE.backup~ -mmin -60 2>/dev/null` ] &&
-  cp --backup $HISTFILE $HISTFILE.backup~
+  \cp --backup $HISTFILE $HISTFILE.backup~
 
 # on every prompt, save new history to dedicated file and recreate full history
 # by reading all files, always keeping history from current session on top.
@@ -33,7 +33,7 @@ export PROMPT_COMMAND='update_history'
 # merge session history into main history file on bash exit
 merge_session_history () {
   cat ${HISTFILE}.$$ >> $HISTFILE
-  rm ${HISTFILE}.$$
+  \rm ${HISTFILE}.$$
 }
 trap merge_session_history EXIT
 
@@ -47,7 +47,7 @@ if [ -n "$orphaned_files" ]; then
   for f in $orphaned_files; do
     echo "  `basename $f`"
     cat $f >> $HISTFILE
-    rm $f
+    \rm $f
   done
   echo "done."
 fi
@@ -57,8 +57,8 @@ split_history_file () {
   echo "Archiving old bash history for better performance..."
   archive_file="$HISTFILE.archive.$(date +%F.%H:%M:%S)"
   split -n "l/2" "$HISTFILE" "$HISTFILE.split_"
-  mv --backup "$HISTFILE.split_aa" "$archive_file"
-  mv --backup "$HISTFILE.split_ab" "$HISTFILE"
+  \mv --backup "$HISTFILE.split_aa" "$archive_file"
+  \mv --backup "$HISTFILE.split_ab" "$HISTFILE"
   # exclude timestamp comments when summarizing split
   echo -n $(sed '/^#[0-9]\+$/d' "$archive_file" | wc | awk '{print $1}')
   echo " entries archived to `basename $archive_file`"
