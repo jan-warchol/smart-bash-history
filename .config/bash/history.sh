@@ -40,7 +40,9 @@ update_history () {
   done
   history -r "${HISTFILE}.$$"
 }
-export PROMPT_COMMAND="update_history; $PROMPT_COMMAND"
+if [[  "$PROMPT_COMMAND" != *update_history* ]]; then
+  export PROMPT_COMMAND="update_history; $PROMPT_COMMAND"
+fi
 
 # merge session history into main history file on bash exit
 merge_session_history () {
