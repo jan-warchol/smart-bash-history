@@ -12,7 +12,7 @@ cat "$1" | sed 's/^git /g /' > "$1.0"
 
 # join timestamp comment and actual command into one line for further
 # processing
-cat "$1.0" | sed -n '/^#[0-9]*$/!p; /^#[0-9]*$/{N; s/\n/ /g; p;}' > "$1.1"
+cat "$1.0" | sed -n '/^#[0-9]*$/!{s/^/#0000000001 /; p}; /^#[0-9]*$/{N; s/\n/ /g; p;}' > "$1.1"
 
 # remove short commands (up to 6 characters)
 cat "$1.1" | sed -r '/^(#[0-9]* )?.{1,6}$/d' > "$1.2"
@@ -30,4 +30,4 @@ cat "$1.4" | sed -r '/^(#[0-9]* )?man (git )?.[a-z_\-]*$/d' > "$1.5"
 cat "$1.5" | tac | awk '!uniq[substr($0, 12)]++' | tac > "$1.6"
 
 # split entries in two lines again
-cat "$1.6" | sed -r 's/^(#[0-9]*) /\1\n/' > "$1.7"
+cat "$1.6" | sed -r 's/^(#[0-9]*) /\1\n/' | grep -v "^#0000000001$" > "$1.7"
