@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Groom bash history file, removing entries that are not interesting and
+# duplicated.
+if [ $# != 1 ]; then
+  echo "Wrong number of arguments."
+  echo "Usage: $0 <history file to process>"
+fi
+
+# join timestamp comment and actual command into one line for further
+# processing
+cat "$1" | sed -n '/^#[0-9]*$/!p; /^#[0-9]*$/{N; s/\n/ /g; p;}' > "$1.joined"
+
+# remove short commands (up to 6 characters)
+cat "$1.joined" | sed -r '/^(#[0-9]* )?.{1,6}$/d' > "$1.1"
+
+# remove duplicates (keeping *last* occurrence)
+cat "$1.1" | tac | awk '!uniq[substr($0, 12)]++' | tac > "$1.2"
+
+# split entries in two lines again
+cat "$1.2" | sed -r 's/^(#[0-9]*) /\1\n/' > "$1.3"
