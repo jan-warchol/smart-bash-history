@@ -34,6 +34,11 @@ shopt -s histappend   # don't overwrite history file after each session
 update_history () {
   history -a ${HISTFILE}.$$
   history -c
+  # read filtered archival files (from all hosts)
+  for f in `ls $(dirname ${HISTFILE})/bash-history-*.filtered_*`; do
+    history -r $f
+  done
+  # read unfiltered items
   history -r
   for f in `ls ${HISTFILE}.[0-9]* 2>/dev/null | grep -v "${HISTFILE}.$$\$"`; do
     history -r $f
@@ -50,6 +55,11 @@ merge_session_history () {
   \rm ${HISTFILE}.$$
 }
 trap merge_session_history EXIT
+
+# when I don't want to save history from a session
+clear_session_history () {
+  > "${HISTFILE}.$$"
+}
 
 # detect leftover files from crashed sessions and merge them back
 active_shells=$(pgrep -f `ps -p $$ -o comm=`)
