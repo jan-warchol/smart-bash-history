@@ -34,6 +34,11 @@ shopt -s histappend   # don't overwrite history file after each session
 update_history () {
   history -a ${HISTFILE}.$$
   history -c
+  # read filtered archival files (from all hosts)
+  for f in `ls $(dirname ${HISTFILE})/bash-history-*.filtered_*`; do
+    history -r $f
+  done
+  # read unfiltered items
   history -r
   for f in `ls ${HISTFILE}.[0-9]* 2>/dev/null | grep -v "${HISTFILE}.$$\$"`; do
     history -r $f
