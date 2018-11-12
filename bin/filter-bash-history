@@ -7,15 +7,25 @@ if [ $# != 1 ]; then
   echo "Usage: $0 <history file to process>"
 fi
 
-# replace all occurrences of "git" with "g" for consistency
-cat "$1" | sed 's/^git /g /' |
+cat "$1" |
+
+# Normalize commands for better deduplication
+
+# trim leading and trailing whitespace
+sed -r 's/^\s+//; s/\s+$//' |
+
+# normalize "git" to "g"
+sed 's/^git /g /' |
+
+
+# Remove uninteresting commands
 
 # prepend placeholder timestamp to commands that didn't have one;
 # join timestamp and command into one line for further processing
 sed -n '/^#[0-9]*$/!{s/^/#0000000001 /; p}; /^#[0-9]*$/{N; s/\n/ /g; p;}' |
 
 # remove short commands (up to 6 characters)
-sed -r '/^#[0-9]* .{1,6}$/d' |
+sed -r '/^#[0-9]* .{0,6}$/d' |
 
 # remove short git commands
 sed -r '/^#[0-9]* g .{1,8}$/d' |
@@ -25,6 +35,13 @@ sed -r '/^#[0-9]* cd (\/home\/)?.{1,16}$/d' |
 
 # remove man commands
 sed -r '/^#[0-9]* man (git )?.[a-z_\-]*$/d' |
+
+
+# Deduplicate
+
+# sort by timestamp, keeping untimestamped commands at the beginning in
+# original order
+sort --stable --key=1,1 |
 
 # remove duplicates (keeping *last* occurrence). See
 # https://stackoverflow.com/questions/39076336/bash-remove-duplicates-preserve-order
