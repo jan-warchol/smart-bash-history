@@ -56,6 +56,11 @@ merge_session_history () {
 }
 trap merge_session_history EXIT
 
+# when I don't want to save history from a session
+clear_session_history () {
+  > "${HISTFILE}.$$"
+}
+
 # detect leftover files from crashed sessions and merge them back
 active_shells=$(pgrep -f `ps -p $$ -o comm=`)
 grep_pattern=`for pid in $active_shells; do echo -n "-e \.${pid}\$ "; done`
