@@ -35,7 +35,7 @@ update_history () {
   history -a ${HISTFILE}.$$
   history -c
   # read filtered archival files (from all hosts)
-  for f in `ls $(dirname ${HISTFILE})/bash-history-*.filtered_*`; do
+  for f in `ls $(dirname ${HISTFILE})/bash-history-*.filtered_* 2>/dev/null`; do
     history -r $f
   done
   # read unfiltered items
