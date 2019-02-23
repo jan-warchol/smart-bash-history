@@ -80,3 +80,13 @@ if [ -n "$orphaned_files" ]; then
   echo "done."
 fi
 
+# Merge ALL history files into main history file (settles entry numbering).
+# See commit message for detailed rationale and use-case.
+flush_session_histories () {
+  for session_file in $(ls ${HISTFILE}.[0-9]* 2>/dev/null); do
+    echo Flushing $session_file
+    cat "$session_file" >> "$HISTFILE"
+    \rm "$session_file"
+  done
+}
+
