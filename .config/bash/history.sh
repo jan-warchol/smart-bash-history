@@ -26,8 +26,10 @@ shopt -s histappend   # don't overwrite history file after each session
 # ensure we have a backup that is not older than an hour, just in case
 [ -z `find $HISTFILE.backup~ -mmin -60 2>/dev/null` ] &&
   \cp --backup $HISTFILE $HISTFILE.backup~
-[ `stat --printf="%s" $HISTFILE.backup~` -lt `stat --printf="%s" $HISTFILE.backup~~` ] &&
-  echo Warning! It seems that history file shrank - verify the backups!
+if [ -e $HISTFILE.backup~~ ]; then
+  [ `stat --printf="%s" $HISTFILE.backup~` -lt `stat --printf="%s" $HISTFILE.backup~~` ] &&
+    echo Warning! It seems that history file shrank - verify the backups!
+fi
 
 
 # on every prompt, save new history to dedicated file and recreate full history
