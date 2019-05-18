@@ -10,7 +10,7 @@ mkdir -p $HISTDIR ${HISTDIR}-backup; touch $HISTMERGED
 export HISTTIMEFORMAT="%F %T "
 
 export HISTCONTROL=ignoreboth   # ignore duplicates and commands starting with space
-export HISTIGNORE="?:cd:-:..:ls:ll:bg:fg:vim:cim:g:g s:g d:g-"
+export HISTIGNORE="?:cd:-:..:ls:ll:bg:fg:vim:cim:g:g s:g d:g-:hrn:hrn *"
 
 # disable terminal flow control key binding, so that ^S will search history forward
 stty -ixon
@@ -102,3 +102,41 @@ flush_session_histories () {
   done
 }
 
+history_remove_last_entries() {
+  file=$HISTFILE.$$
+  count=${1:-1}
+  file_length=$(wc -l < $file)
+  delete_from=$(( $file_length - $count * 2 + 1 ))
+  [ $delete_from -lt 1 ] && delete_from=1
+
+  echo -e "About to remove $count entries from $file:\n"
+  sed -n "$delete_from,\$p" $file |
+    # color timestamps for easier reading
+    sed "s/#[0-9]\+/[37m&1[0m/"
+
+  echo ""
+  read -r -p "Press <Enter> to confirm."
+  sed -i "$delete_from,\$d" $file
+}
+alias hrn=history_remove_last_entries
+
+history_remove_matching_entries() {
+  file=$HISTFILE.$$
+  grep --fixed-strings "$@" $file
+
+  # include previous line (with timestamp)
+  line_numbers=$(grep \
+    --before-context=1 --no-group-separator --line-number \
+    --fixed-strings "$@" $file |
+    sed 's/[:-].*$/;/'
+  )
+
+  echo -e "\nAbout to remove the following lines from $file:\n"
+  sed -n "$(echo $line_numbers | sed 's/;/p;/g')" $file |
+    # color timestamps for easier reading
+    sed "s/#[0-9]\+/[37m&1[0m/"
+
+  echo ""
+  read -r -p "Press <Enter> to confirm."
+  sed -i "$(echo $line_numbers | sed 's/;/d;/g')" $file
+}
