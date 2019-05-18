@@ -1,3 +1,8 @@
+# I prefer to keep my history in my data folder so that it's backed up
+export HISTFILE="$HOME/data/history/bash-history-$DISAMBIG_SUFFIX"
+export HISTMERGED="${HISTFILE}_$(date +%Y-%m)"
+mkdir -p `dirname $HISTFILE`
+
 # enable keeping history timestamp and set format to ISO-8601
 export HISTTIMEFORMAT="%F %T "
 
@@ -24,10 +29,10 @@ shopt -s histappend   # don't overwrite history file after each session
 # terminal crashes.
 
 # ensure we have a backup that is not older than an hour, just in case
-[ -z `find $HISTFILE.backup~ -mmin -60 2>/dev/null` ] &&
-  \cp --backup $HISTFILE $HISTFILE.backup~ 2> >(grep -v "No such file")
-if [ -e $HISTFILE.backup~~ ]; then
-  [ `stat --printf="%s" $HISTFILE.backup~` -lt `stat --printf="%s" $HISTFILE.backup~~` ] &&
+[ -z `find $HISTMERGED.backup~ -mmin -60 2>/dev/null` ] &&
+  \cp --backup $HISTMERGED $HISTMERGED.backup~ 2> >(grep -v "No such file")
+if [ -e $HISTMERGED.backup~~ ]; then
+  [ `stat --printf="%s" $HISTMERGED.backup~` -lt `stat --printf="%s" $HISTMERGED.backup~~` ] &&
     echo Warning! It seems that history file shrank - verify the backups!
 fi
 
@@ -38,11 +43,11 @@ update_history () {
   history -a ${HISTFILE}.$$
   history -c
   # read filtered archival files (from all hosts)
-  for f in `ls $(dirname ${HISTFILE})/bash-history-*.filtered_* 2>/dev/null`; do
+  for f in `ls ${HISTFILE}_20??.filtered 2>/dev/null`; do
     history -r $f
   done
   # read unfiltered items
-  history -r
+  history -r $HISTMERGED
   # load histories of other sessions
   for f in `ls ${HISTFILE}.[0-9]* 2>/dev/null | grep -v "${HISTFILE}.$$\$"`; do
     history -r $f
@@ -56,7 +61,7 @@ fi
 
 # merge session history into main history file on bash exit
 merge_session_history () {
-  cat ${HISTFILE}.$$ >> $HISTFILE
+  cat ${HISTFILE}.$$ >> $HISTMERGED
   \rm ${HISTFILE}.$$
 }
 trap merge_session_history EXIT
@@ -76,7 +81,7 @@ if [ -n "$orphaned_files" ]; then
   echo Merging orphaned history files:
   for f in $orphaned_files; do
     echo "  `basename $f`"
-    cat $f >> $HISTFILE
+    cat $f >> $HISTMERGED
     \rm $f
   done
   echo "done."
@@ -87,7 +92,7 @@ fi
 flush_session_histories () {
   for session_file in $(ls ${HISTFILE}.[0-9]* 2>/dev/null); do
     echo Flushing $session_file
-    cat "$session_file" >> "$HISTFILE"
+    cat "$session_file" >> "$HISTMERGED"
     \rm "$session_file"
   done
 }
