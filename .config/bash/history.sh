@@ -1,7 +1,10 @@
 # I prefer to keep my history in my data folder so that it's backed up
-export HISTFILE="$HOME/data/history/bash-history-$DISAMBIG_SUFFIX"
+export HISTDIR="$HOME/data/history"
+export HISTFNAME="bash-history-$DISAMBIG_SUFFIX"
+export HISTFILE="$HISTDIR/$HISTFNAME"
 export HISTMERGED="${HISTFILE}_$(date +%Y-%m)"
-mkdir -p `dirname $HISTFILE`
+export HISTBACKUP="${HISTDIR}-backup/${HISTFNAME}_$(date +%Y-%m).bak"
+mkdir -p $HISTDIR ${HISTDIR}-backup; touch $HISTMERGED
 
 # enable keeping history timestamp and set format to ISO-8601
 export HISTTIMEFORMAT="%F %T "
@@ -18,6 +21,16 @@ export HISTSIZE=-1
 shopt -s histappend   # don't overwrite history file after each session
 
 
+# ensure we have a backup and verify that we didn't loose stuff
+if [[ -e $HISTBACKUP && \
+  `stat --printf="%s" $HISTMERGED` -lt `stat --printf="%s" $HISTBACKUP` ]]; then
+    echo Warning! It seems that history file shrank - verify the backup!
+    ls -hog $HISTMERGED $HISTBACKUP
+  else
+    \cp $HISTMERGED $HISTBACKUP
+fi
+
+
 # Synchronize history between bash sessions
 #
 # Make history from other terminals available to the current one. However,
@@ -27,15 +40,6 @@ shopt -s histappend   # don't overwrite history file after each session
 #
 # Since history is saved on each prompt, this additionally protects it from
 # terminal crashes.
-
-# ensure we have a backup that is not older than an hour, just in case
-[ -z `find $HISTMERGED.backup~ -mmin -60 2>/dev/null` ] &&
-  \cp --backup $HISTMERGED $HISTMERGED.backup~ 2> >(grep -v "No such file")
-if [ -e $HISTMERGED.backup~~ ]; then
-  [ `stat --printf="%s" $HISTMERGED.backup~` -lt `stat --printf="%s" $HISTMERGED.backup~~` ] &&
-    echo Warning! It seems that history file shrank - verify the backups!
-fi
-
 
 # on every prompt, save new history to dedicated file and recreate full history
 # by reading all files, always keeping history from current session on top.
