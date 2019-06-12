@@ -46,17 +46,18 @@ fi
 update_history () {
   history -a ${HISTFILE}.$$
   history -c
-  # read filtered archival files (from all hosts)
-  for f in `ls ${HISTFILE}_20??.filtered 2>/dev/null`; do
+  for f in $(
+    # filtered archival files (from all hosts)
+    ls $(dirname ${HISTFILE})/*_20??.filtered 2>/dev/null;
+    # history from previous months
+    ls ${HISTFILE}_20??-?? 2>/dev/null;
+    # histories of other sessions
+    ls ${HISTFILE}.[0-9]* 2>/dev/null | grep -v "${HISTFILE}.$$\$";
+    # history of current session (should be on top)
+    echo "${HISTFILE}.$$"
+  ) ; do
     history -r $f
   done
-  # read unfiltered items
-  history -r $HISTMERGED
-  # load histories of other sessions
-  for f in `ls ${HISTFILE}.[0-9]* 2>/dev/null | grep -v "${HISTFILE}.$$\$"`; do
-    history -r $f
-  done
-  history -r "${HISTFILE}.$$"  # load current session history
 }
 if [[ "$PROMPT_COMMAND" != *update_history* ]]; then
   export PROMPT_COMMAND="update_history; $PROMPT_COMMAND"
