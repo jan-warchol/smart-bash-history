@@ -1,6 +1,6 @@
 # I prefer to keep my history in my data folder so that it's backed up
 export HISTDIR="$HOME/data/history"
-export HISTFNAME="bash-history-$DISAMBIG_SUFFIX"
+export HISTFNAME="$DISAMBIG_SUFFIX"
 export HISTFILE="$HISTDIR/$HISTFNAME"
 export HISTMERGED="${HISTFILE}_$(date +%Y-%m)"
 export HISTBACKUP="${HISTDIR}-backup/${HISTFNAME}_$(date +%Y-%m).bak"
