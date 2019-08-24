@@ -48,8 +48,6 @@ sort --stable --key=1,1 |
 tac | awk '!uniq[substr($0, 12)]++' | tac |
 
 # split entries in two lines again, remove placeholder timestamps
-sed -r 's/^(#[0-9]*) /\1\n/' | grep -v "^#0000000001$" > "$1.filtered_$(date +%F)"
+sed -r 's/^(#[0-9]*) /\1\n/' | grep -v "^#0000000001$" > "$1.filtered"
 
-echo Trimmed history file saved to "$1.filtered_$(date +%F)".
-echo Archiving unfiltered data...
-\mv --backup=numbered --verbose "$1" "$1.archive_$(date +%F)"
+echo Trimmed history file saved to "$1.filtered"
