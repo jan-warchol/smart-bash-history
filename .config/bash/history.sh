@@ -10,7 +10,7 @@ mkdir -p $HISTDIR ${HISTDIR}-backup; touch $HISTMERGED
 export HISTTIMEFORMAT="%F %T "
 
 export HISTCONTROL=ignoreboth   # ignore duplicates and commands starting with space
-export HISTIGNORE="?:cd:-:..:ls:ll:bg:fg:vim:cim:g:g s:g d:g-:hrn:hrn *"
+export HISTIGNORE="?:cd:-:..:ls:ll:bg:fg:vim:cim:g:g s:g d:g-:hrn:hrn *:hrm *"
 
 # disable terminal flow control key binding, so that ^S will search history forward
 stty -ixon
@@ -121,22 +121,39 @@ history_remove_last_entries() {
 alias hrn=history_remove_last_entries
 
 history_remove_matching_entries() {
-  file=$HISTFILE.$$
-  grep --fixed-strings "$@" $file
-
-  # include previous line (with timestamp)
-  line_numbers=$(grep \
-    --before-context=1 --no-group-separator --line-number \
-    --fixed-strings "$@" $file |
-    sed 's/[:-].*$/;/'
-  )
-
-  echo -e "\nAbout to remove the following lines from $file:\n"
-  sed -n "$(echo $line_numbers | sed 's/;/p;/g')" $file |
-    # color timestamps for easier reading
-    sed "s/#[0-9]\+/[37m&1[0m/"
-
+  path="$HISTDIR"
+  pattern="$@"
+  [ -z "$HIST_PRUNE_USE_REGEX" ] &&
+    mode="--fixed-strings" || mode="--extended-regexp"
   echo ""
-  read -r -p "Press <Enter> to confirm."
-  sed -i "$(echo $line_numbers | sed 's/;/d;/g')" $file
+
+  for file in `find "$path" -type f`; do
+    line_numbers=$(grep \
+      --before-context=1 --no-group-separator --line-number \
+      $mode "$pattern" $file |
+      sed 's/[:-].*$/;/'
+    )
+
+    if [ -n "$line_numbers" ]; then
+      echo -e "\033[1;37m$file\033[0m"  # header with filename
+      sed -n "$(echo "$line_numbers" | sed 's/;/p;/g')" $file |
+        # color timestamps for easier reading
+        sed "s/#[0-9]\+/[37m&1[0m/"
+        echo ""
+
+      if [ -z "$HIST_PRUNE_DRY_RUN" ]; then
+        echo "Removing entries from $file" 1>&2
+        echo ""
+        sed -i "$(echo $line_numbers | sed 's/;/d;/g')" $file
+      fi
+    fi
+  done
 }
+
+hrm() {
+  HIST_PRUNE_DRY_RUN=yes history_remove_matching_entries "$@"
+  read -r -p "Press <Enter> to remove matching entries from history."
+  history_remove_matching_entries "$@" >/dev/null
+}
+
+hrmr() { HIST_PRUNE_USE_REGEX=yes hrm "$@"; }
