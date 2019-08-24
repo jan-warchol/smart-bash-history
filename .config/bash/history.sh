@@ -121,13 +121,13 @@ history_remove_last_entries() {
 alias hrn=history_remove_last_entries
 
 history_remove_matching_entries() {
-  path="$HISTDIR"
+  search_path=$(find "$HISTDIR" -type f | grep -v jw-t430s_2016)
   pattern="$@"
   [ -z "$HIST_PRUNE_USE_REGEX" ] &&
     mode="--fixed-strings" || mode="--extended-regexp"
   echo ""
 
-  for file in `find "$path" -type f`; do
+  for file in $search_path; do
     line_numbers=$(grep \
       --before-context=1 --no-group-separator --line-number \
       $mode "$pattern" $file |
@@ -152,8 +152,13 @@ history_remove_matching_entries() {
 
 hrm() {
   HIST_PRUNE_DRY_RUN=yes history_remove_matching_entries "$@"
+  untimestamped="$HISTDIR/archive/jw-t430s_2016"
+  echo -e "\n$untimestamped"
+  sed -n -r "/$@/p" $untimestamped
   read -r -p "Press <Enter> to remove matching entries from history."
   history_remove_matching_entries "$@" >/dev/null
+  echo "Removing entries from $untimestamped"
+  sed -i -r "/$@/d" $untimestamped
 }
 
 hrmr() { HIST_PRUNE_USE_REGEX=yes hrm "$@"; }
