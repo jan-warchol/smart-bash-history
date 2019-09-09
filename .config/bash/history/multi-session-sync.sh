@@ -31,17 +31,16 @@ if [[ "$PROMPT_COMMAND" != *update_history* ]]; then
 fi
 
 
-# merge session history into main history file on bash exit
-merge_session_history () {
-  cat ${HISTFILE}.$$ >> $HISTMERGED
-  \rm ${HISTFILE}.$$
+__merge_history_file() {
+  [ $# -ne 1 ] && echo "Missing argument" && return 1
+  file="$1"
+  echo "flushing $(basename $file)"
+  cat "$file" >> "$HISTMERGED"
+  \rm "$file"
 }
+# update main history file on bash exit
+merge_session_history() { __merge_history_file "${HISTFILE}.$$"; }
 trap merge_session_history EXIT
-
-# when I don't want to save history from a session
-clear_session_history () {
-  > "${HISTFILE}.$$"
-}
 
 
 # detect leftover files from crashed sessions and merge them back
@@ -50,22 +49,19 @@ grep_pattern=`for pid in $active_shells; do echo -n "-e \.${pid}\$ "; done`
 orphaned_files=`ls $HISTFILE.[0-9]* 2>/dev/null | grep -v $grep_pattern`
 
 if [ -n "$orphaned_files" ]; then
-  echo Merging orphaned history files:
+  echo Found orphaned history files.
   for f in $orphaned_files; do
-    echo "  `basename $f`"
-    cat $f >> $HISTMERGED
-    \rm $f
+    echo -n "  "; __merge_history_file "$f"
   done
   echo "done."
 fi
+
 
 # Merge ALL history files into main history file (settles entry numbering).
 # See commit message for detailed rationale and use-case.
 flush_session_histories () {
   for session_file in $(ls ${HISTFILE}.[0-9]* 2>/dev/null); do
-    echo Flushing $session_file
-    cat "$session_file" >> "$HISTMERGED"
-    \rm "$session_file"
+    __merge_history_file "$session_file"
   done
 }
 
