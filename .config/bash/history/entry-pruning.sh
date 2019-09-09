@@ -1,3 +1,5 @@
+# Utilities for removing unwanted history entries (e.g. wrong syntax used)
+
 history_remove_last_entries() {
   file=$HISTFILE.$$
   count=${1:-1}
@@ -16,45 +18,61 @@ history_remove_last_entries() {
 }
 alias hrn=history_remove_last_entries
 
+__find_matching_lines() {
+  [ $# -lt 2 ] && \
+    echo "Usage: __find_matching_lines <pattern> <file> [<opts>]" && return 3
+  default_matcher="--fixed-strings"
+
+  pattern="$1"; file="$2";
+  opts="${3:-$default_matcher}"
+  # include previous line (with timestamp) if it's being saved by shell
+  [ -n "$HISTTIMEFORMAT" ] && opts="--before-context=1 $opts"
+
+  set -o pipefail
+  grep --no-group-separator --line-number \
+    $opts "$pattern" "$file" |
+    sed 's/[:-].*$/;/'
+  return $?
+}
+
+__print_matches() {
+  file="$2"
+  line_numbers=$(__find_matching_lines "$@")
+  if [ $? -gt 1 ]; then  # 1 means no results
+    echo -e "Internal error during search! \n  $line_numbers"
+    return 1
+  fi
+
+  if [ -n "$line_numbers" ]; then
+    echo -e "\n\033[1;37m$file\033[0m"  # header with filename
+    sed -n "$(echo "$line_numbers" | sed 's/;/p;/g')" "$file" |
+      # color timestamps for easier reading
+      sed "s/#[0-9]\+/[37m&1[0m/"
+  fi
+}
+
+__remove_matches() {
+  file="$2"
+  line_numbers=$(__find_matching_lines "$@")
+  if [ $? -gt 1 ]; then  # 1 means no results
+    echo -e "Internal error during search! \n  $line_numbers"
+    return 1
+  fi
+  if [ -n "$line_numbers" ]; then
+    echo "Removing entries from $file" 1>&2
+    sed -i "$(echo $line_numbers | sed 's/;/d;/g')" $file
+  fi
+}
+
 history_remove_matching_entries() {
-  search_path=$(find "$HISTDIR" -type f | grep -v jw-t430s_2016)
-  pattern="$@"
-  [ -z "$HIST_PRUNE_USE_REGEX" ] &&
-    mode="--fixed-strings" || mode="--extended-regexp"
+  path=$(find "${HISTDIR:-$HISTFILE}" -type f)
+  for f in $path; do
+    __print_matches "$@" $f
+  done
   echo ""
-
-  for file in $search_path; do
-    line_numbers=$(grep \
-      --before-context=1 --no-group-separator --line-number \
-      $mode "$pattern" $file |
-      sed 's/[:-].*$/;/'
-    )
-
-    if [ -n "$line_numbers" ]; then
-      echo -e "\033[1;37m$file\033[0m"  # header with filename
-      sed -n "$(echo "$line_numbers" | sed 's/;/p;/g')" $file |
-        # color timestamps for easier reading
-        sed "s/#[0-9]\+/[37m&1[0m/"
-        echo ""
-
-      if [ -z "$HIST_PRUNE_DRY_RUN" ]; then
-        echo "Removing entries from $file" 1>&2
-        echo ""
-        sed -i "$(echo $line_numbers | sed 's/;/d;/g')" $file
-      fi
-    fi
+  read -r -p "Press <Enter> to remove matching entries from history."
+  for f in $path; do
+    __remove_matches "$@" $f
   done
 }
 
-hrm() {
-  HIST_PRUNE_DRY_RUN=yes history_remove_matching_entries "$@"
-  untimestamped="$HISTDIR/archive/jw-t430s_2016"
-  echo -e "\n$untimestamped"
-  sed -n -r "/$@/p" $untimestamped
-  read -r -p "Press <Enter> to remove matching entries from history."
-  history_remove_matching_entries "$@" >/dev/null
-  echo "Removing entries from $untimestamped"
-  sed -i -r "/$@/d" $untimestamped
-}
-
-hrmr() { HIST_PRUNE_USE_REGEX=yes hrm "$@"; }
