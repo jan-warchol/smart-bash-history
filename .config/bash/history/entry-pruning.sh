@@ -30,49 +30,42 @@ __find_matching_lines() {
 
   set -o pipefail
   grep --no-group-separator --line-number \
-    $opts "$pattern" "$file" |
+    $opts $MATCHER "$pattern" "$file" |
     sed 's/[:-].*$/;/'
   return $?
 }
 
-__print_matches() {
-  file="$2"
-  line_numbers=$(__find_matching_lines "$@")
-  if [ $? -gt 1 ]; then  # 1 means no results
-    echo -e "Internal error during search! \n  $line_numbers"
-    return 1
-  fi
-
-  if [ -n "$line_numbers" ]; then
-    echo -e "\n\033[1;37m$file\033[0m"  # header with filename
-    sed -n "$(echo "$line_numbers" | sed 's/;/p;/g')" "$file" |
-      # color timestamps for easier reading
-      sed "s/#[0-9]\+/[37m&1[0m/"
-  fi
-}
-
-__remove_matches() {
-  file="$2"
-  line_numbers=$(__find_matching_lines "$@")
-  if [ $? -gt 1 ]; then  # 1 means no results
-    echo -e "Internal error during search! \n  $line_numbers"
-    return 1
-  fi
-  if [ -n "$line_numbers" ]; then
-    echo "Removing entries from $file" 1>&2
-    sed -i "$(echo $line_numbers | sed 's/;/d;/g')" $file
-  fi
-}
-
 history_remove_matching_entries() {
   path=$(find "${HISTDIR:-$HISTFILE}" -type f)
-  for f in $path; do
-    __print_matches "$@" $f
-  done
-  echo ""
-  read -r -p "Press <Enter> to remove matching entries from history."
-  for f in $path; do
-    __remove_matches "$@" $f
+
+  for file in $path; do
+    line_numbers=$(__find_matching_lines "$*" "$file")
+    if [ $? -gt 1 ]; then  # 1 means no results
+      echo -e "Internal error during search! \n  $line_numbers"
+      return 1
+    fi
+
+    if [ -n "$line_numbers" ]; then
+      echo -e "\n\033[1;37m$file\033[0m"  # header with filename
+      sed -n "$(echo "$line_numbers" | sed 's/;/p;/g')" "$file" |
+        # color timestamps for easier reading
+        sed "s/#[0-9]\+/[37m&1[0m/"
+
+      if [ -z "$HIST_PRUNE_DRY_RUN" ]; then
+        if [ -z "$HIST_PRUNE_FORCE" ]; then
+          echo ""
+          read -r -p "Press <Enter> to remove matching entries from history."
+        fi
+        echo "Removing entries from $file" 1>&2
+        sed -i "$(echo $line_numbers | sed 's/;/d;/g')" $file
+      fi
+    fi
   done
 }
 
+hrm() {
+  HIST_PRUNE_DRY_RUN=yes history_remove_matching_entries "$@"
+  echo ""
+  read -r -p "Press <Enter> to remove matching entries from history."
+  HIST_PRUNE_FORCE=yes history_remove_matching_entries "$@" >/dev/null
+}
