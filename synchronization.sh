@@ -10,14 +10,14 @@
 
 # on every prompt, save new history to dedicated file and recreate full history
 # by reading all files, always keeping history from current session on top.
-update_history () {
+__reload_history () {
   history -a ${HISTFILE}.$$
   history -c
   for f in $(
-    # filtered archival files (from all hosts)
-    ls $(dirname ${HISTFILE})/*_20??.filtered 2>/dev/null;
-    # history from previous months
-    ls ${HISTFILE}_20??-?? 2>/dev/null;
+    # backward compatibility
+    $HOME/.bash_history
+    # main file with merged history
+    $HISTFILE
     # histories of other sessions
     ls ${HISTFILE}.[0-9]* 2>/dev/null | grep -v "${HISTFILE}.$$\$";
     # history of current session (should be on top)
@@ -26,8 +26,8 @@ update_history () {
     history -r $f
   done
 }
-if [[ "$PROMPT_COMMAND" != *update_history* ]]; then
-  export PROMPT_COMMAND="update_history; $PROMPT_COMMAND"
+if [[ "$PROMPT_COMMAND" != *__reload_history* ]]; then
+  export PROMPT_COMMAND="__reload_history; $PROMPT_COMMAND"
 fi
 
 
@@ -35,7 +35,7 @@ __merge_history_file() {
   [ $# -ne 1 ] && echo "Missing argument" && return 1
   file="$1"
   echo "flushing $(basename $file)"
-  cat "$file" >> "$HISTMERGED"
+  cat "$file" >> "$HISTFILE"
   \rm "$file"
 }
 # update main history file on bash exit
@@ -45,15 +45,14 @@ trap merge_session_history EXIT
 
 # detect leftover files from crashed sessions and merge them back
 active_shells=$(pgrep `ps -p $$ -o comm=`)
-grep_pattern=`for pid in $active_shells; do echo -n "-e \.${pid}\$ "; done`
-orphaned_files=`ls $HISTFILE.[0-9]* 2>/dev/null | grep -v $grep_pattern`
+grep_pattern=$(for pid in $active_shells; do echo -n "-e \.${pid}\$ "; done)
+orphaned_files=$(ls $HISTFILE.[0-9]* 2>/dev/null | grep -v $grep_pattern)
 
 if [ -n "$orphaned_files" ]; then
   echo Found orphaned history files.
   for f in $orphaned_files; do
     echo -n "  "; __merge_history_file "$f"
-  done
-  echo "done."
+  done; echo "done."
 fi
 
 
