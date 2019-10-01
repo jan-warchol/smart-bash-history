@@ -32,13 +32,21 @@ should update `~/.bash_profile` instead of `~/.bashrc`):
 
 New shell sessions should have smart history features enabled.
 
+To enable interactive history search, download
+[fzf](https://github.com/junegunn/fzf-bin/releases) into smart-bash-history.
+For example, assuming you are using 64-bit Linux:
+
+    cd smart-bash-history
+    wget https://github.com/junegunn/fzf-bin/releases/download/0.18.0/fzf-0.18.0-linux_amd64.tgz -O- | tar xz
+
 
 
 Usage
 -----
 
-Recalling commands from history (and `history` command itself) works the same
-as before.
+Press `Ctrl-R` and start typing to interactively search history (you can also
+use up and down arrows). Confirm selection by pressing return. `history`
+command itself works the same as before.
 
 To filter your history file, removing short and uninteresting commands and
 keeeping only one occurrence of each commmand:

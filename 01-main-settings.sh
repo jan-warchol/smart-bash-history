@@ -29,9 +29,26 @@ if [[ -e $HISTBACKUP && $histfile_size -lt $histbackup_size ]]; then
     [ -e $HISTFILE ] && cp $HISTFILE $HISTBACKUP
 fi
 
-# load remaining history configuration files
-# (we must use full path and cannot rely on $0 because of sourcing quirks)
+# we cannot rely on $0 because of sourcing quirks
 repo_root=$(dirname ${BASH_SOURCE})
+export PATH="$PATH:$repo_root"
+
+# interactive, fuzzy history search (requires https://github.com/junegunn/fzf)
+if which fzf >/dev/null; then
+  __history_fzf_search() (
+    # remove entry numbers and timestamps (if any)
+    HISTTIMEFORMAT= history | sed 's/^ *\([0-9]*\)\** *//' |
+      fzf --height 50% --tiebreak=index --bind=ctrl-r:toggle-sort \
+      --tac --sync --no-multi "--query=$*" ||
+      # restore typed input if fzf aborted
+      echo $*
+  )
+  # replace default Ctrl-R mapping
+  bind '"\er": redraw-current-line'  # helper
+  bind '"\C-r": " \C-e\C-u`__history_fzf_search \C-y`\e\C-e\er"'
+fi
+
+# load remaining history configuration files (must use full path)
 source $repo_root/synchronization.sh
 source $repo_root/filtering.sh
 source $repo_root/entry-pruning.sh
