@@ -20,8 +20,10 @@ if [[ -e $HISTBACKUP && \
   `stat --printf="%s" $HISTFILE` -lt `stat --printf="%s" $HISTBACKUP` ]]; then
     echo Warning! It seems that history file shrank - verify the backup!
     ls -hog $HISTFILE $HISTBACKUP
-  else
-    \cp $HISTFILE $HISTBACKUP
+    echo
+    echo Refusing to overwrite backup file.
+  else  # update backup
+    [ -e $HISTFILE ] && cp $HISTFILE $HISTBACKUP
 fi
 
 # load remaining history configuration files

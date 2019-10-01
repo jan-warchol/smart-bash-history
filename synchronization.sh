@@ -15,9 +15,9 @@ __reload_history () {
   history -c
   for f in $(
     # backward compatibility
-    $HOME/.bash_history
+    ls $HOME/.bash_history 2>/dev/null
     # main file with merged history
-    $HISTFILE
+    ls $HISTFILE 2>/dev/null
     # histories of other sessions
     ls ${HISTFILE}.[0-9]* 2>/dev/null | grep -v "${HISTFILE}.$$\$";
     # history of current session (should be on top)
@@ -33,10 +33,10 @@ fi
 
 __merge_history_file() {
   [ $# -ne 1 ] && echo "Missing argument" && return 1
-  file="$1"
-  echo "flushing $(basename $file)"
+  [ -e "$1" ] && file="$1" || return 0
+  echo "Flushing $(basename $file)"
   cat "$file" >> "$HISTFILE"
-  \rm "$file"
+  rm "$file"
 }
 # update main history file on bash exit
 merge_session_history() { __merge_history_file "${HISTFILE}.$$"; }
