@@ -14,8 +14,6 @@ __reload_history () {
   history -a ${HISTFILE}.$$
   history -c
   for f in $(
-    # backward compatibility
-    ls $HOME/.bash_history 2>/dev/null
     # main file with merged history
     ls $HISTFILE 2>/dev/null
     # histories of other sessions

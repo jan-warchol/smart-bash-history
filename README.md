@@ -29,9 +29,7 @@ users should update `~/.bash_profile` instead of `~/.bashrc`):
     git clone https://github.com/jan-warchol/smart-bash-history.git
     echo 'source $HOME/smart-bash-history/settings.sh' >> ~/.bashrc
 
-New shell sessions should have smart history features enabled. Note that the
-history will now be saved to `~/.bash_history.$(hostname)` (to make backing up
-history from multiple machines simpler).
+New shell sessions should have smart history features enabled.
 
 
 

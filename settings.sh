@@ -3,11 +3,9 @@ export HISTFILESIZE=-1
 export HISTSIZE=-1
 shopt -s histappend
 
-export HISTFILE="$HOME/.bash_history.$(hostname)"
+# unique suffix -> simpler backups if you have many systems
+# export HISTFILE="$HOME/.bash_history.$(hostname)"
 export HISTBACKUP="${HISTFILE}.bak"
-
-# keep command timestamps and display them in ISO 8601-like format
-export HISTTIMEFORMAT="%F.%T "
 
 # don't save duplicates and commands starting with space
 export HISTCONTROL="ignorespace:ignoredups"
