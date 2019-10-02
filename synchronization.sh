@@ -38,9 +38,9 @@ __merge_history_file() {
   cat "$file" >> "$HISTFILE"
   rm "$file"
 }
+flush_current_session_history() { __merge_history_file "${HISTFILE}.$$"; }
 # update main history file on bash exit
-merge_session_history() { __merge_history_file "${HISTFILE}.$$"; }
-trap merge_session_history EXIT
+trap flush_current_session_history EXIT
 
 
 # detect leftover files from crashed sessions and merge them back
@@ -58,7 +58,7 @@ fi
 
 # Merge ALL history files into main history file (settles entry numbering).
 # See commit message for detailed rationale and use-case.
-flush_session_histories () {
+flush_all_session_histories () {
   for session_file in $(ls ${HISTFILE}.[0-9]* 2>/dev/null); do
     __merge_history_file "$session_file"
   done

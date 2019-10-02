@@ -38,9 +38,11 @@ history from multiple machines simpler).
 Usage
 -----
 
-Recalling commands from history (and `history` command itself) works the same as before.
+Recalling commands from history (and `history` command itself) works the same
+as before.
 
-To filter your history file, removing short and uninteresting commands and keeeping only one occurrence of each commmand:
+To filter your history file, removing short and uninteresting commands and
+keeeping only one occurrence of each commmand:
 
     filter_bash_history $HISTFILE
 
