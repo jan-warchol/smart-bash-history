@@ -23,11 +23,11 @@ Features:
 Installation
 ------------
 
-Clone the repo and make sure bash will load `settings.sh` on startup (Note: Mac
-users should update `~/.bash_profile` instead of `~/.bashrc`):
+Clone the repo and make sure bash will load `01-main-settings.sh` on startup
+(Note: Mac users should update `~/.bash_profile` instead of `~/.bashrc`):
 
     git clone https://github.com/jan-warchol/smart-bash-history.git
-    echo 'source $HOME/smart-bash-history/settings.sh' >> ~/.bashrc
+    echo 'source $HOME/smart-bash-history/01-main-settings.sh' >> ~/.bashrc
 
 New shell sessions should have smart history features enabled.
 
