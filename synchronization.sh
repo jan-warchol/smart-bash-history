@@ -17,7 +17,7 @@ __reload_history () {
     # main file with merged history
     ls $HISTFILE 2>/dev/null
     # histories of other sessions
-    ls ${HISTFILE}.[0-9]* 2>/dev/null | grep -v "${HISTFILE}.$$\$";
+    ls ${HISTFILE}.* 2>/dev/null | grep "\.[0-9]*$" | grep -v "${HISTFILE}.$$\$";
     # history of current session (should be on top)
     echo "${HISTFILE}.$$"
   ) ; do
