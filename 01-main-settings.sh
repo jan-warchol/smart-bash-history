@@ -36,6 +36,7 @@ export PATH="$PATH:$repo_root"
 # interactive, fuzzy history search (requires https://github.com/junegunn/fzf)
 if which fzf >/dev/null; then
   __history_fzf_search() (
+    __reload_history
     # remove entry numbers and timestamps (if any)
     HISTTIMEFORMAT= history | sed 's/^ *\([0-9]*\)\** *//' |
       fzf --height 50% --tiebreak=index --bind=ctrl-r:toggle-sort \
