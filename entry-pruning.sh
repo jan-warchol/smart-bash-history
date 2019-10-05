@@ -36,6 +36,7 @@ __find_matching_lines() {
 }
 
 history_remove_matching_entries() {
+  [ $# -eq 0 ] && echo No pattern provided. && return 1
   path=$(find "${HISTDIR:-$HISTFILE}" -type f)
 
   for file in $path; do
@@ -66,6 +67,6 @@ history_remove_matching_entries() {
 hrm() {
   HIST_PRUNE_DRY_RUN=yes history_remove_matching_entries "$@"
   echo ""
-  read -r -p "Press <Enter> to remove matching entries from history."
+  read -r -p "Press <Enter> to remove above entries from history."
   HIST_PRUNE_FORCE=yes history_remove_matching_entries "$@" >/dev/null
 }
