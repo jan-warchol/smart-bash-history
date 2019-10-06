@@ -47,10 +47,8 @@ Press `Ctrl-R` and start typing to interactively search history (you can
 use arrows). Confirm selection by pressing return. `history`
 command itself works the same as before.
 
-To filter your history file, removing short and uninteresting commands and
-keeeping only one occurrence of each commmand:
-
-    filter_bash_history $HISTFILE
+To filter your history file, removing trivial commands and keeping only one
+occurrence of each entry, run `filter_bash_history`.
 
 To remove entries that include `rm -rf foobar`:
 

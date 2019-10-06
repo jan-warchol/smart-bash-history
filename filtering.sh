@@ -2,25 +2,24 @@
 
 # Remove duplicates and uninteresting entries from supplied history file.
 filter_bash_history() {
-  if [ $# != 1 ]; then
-    echo "Wrong number of arguments."
-    echo "Usage: filter_bash_history <history file to process>"
-    return 1
-  fi
+  file="${1:-$HISTFILE}"
+  backup_path="$file.before-filtering.bak"
+  echo -n Filtering \"$file\"...
 
-  cat "$1" |
+  \mv "$file" "$backup_path"
+  cat "$backup_path" |
 
   # Normalize commands for better deduplication ############
 
   # trim leading and trailing whitespace
   sed -r 's/^\s+//; s/\s+$//' |
 
-
-  # Remove uninteresting commands ##########################
-
   # prepend placeholder timestamp to commands that didn't have one;
   # join timestamp and command into one line for further processing
   sed -n '/^#[0-9]*$/!{s/^/#0000000001 /; p}; /^#[0-9]*$/{N; s/\n/ /g; p;}' |
+
+
+  # Remove uninteresting commands ##########################
 
   # remove short commands (up to 6 characters)
   sed -r '/^#[0-9]* .{0,6}$/d' |
@@ -46,12 +45,8 @@ filter_bash_history() {
   tac | awk '!uniq[substr($0, 12)]++' | tac |
 
   # split entries in two lines again, remove placeholder timestamps
-  sed -r 's/^(#[0-9]*) /\1\n/' | grep -v "^#0000000001$" > "$1.filtered"
+  sed -r 's/^(#[0-9]*) /\1\n/' | grep -v "^#0000000001$" > "$file"
 
-  backup_path="$1.$(date +%F.%T)~"
-  \mv "$1" --no-clobber "$backup_path"
-  \mv "$1.filtered" --no-clobber "$1"
-
-  echo \"$1\" filtered.
+  echo " done."
   echo Original history saved to "$backup_path"
 }
