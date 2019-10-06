@@ -12,9 +12,6 @@ export HISTCONTROL="ignorespace:ignoredups"
 # as well as any one-letter commands and some common commands
 export HISTIGNORE="?:ls:la:ll:fg:hrn"
 
-# disable terminal flow control key binding, so that ^S will search history forward
-stty -ixon
-
 # ensure we have a backup and check that we didn't loose stuff
 histfile_size=$(stat --printf="%s" $HISTFILE 2>/dev/null)
 histbackup_size=$(stat --printf="%s" $HISTBACKUP 2>/dev/null)
