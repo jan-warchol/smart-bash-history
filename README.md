@@ -4,14 +4,14 @@ Smart history
 Default shell history behaviour was designed in the 90s. A lot has
 changed since then - time to catch up!
 
-Features:
+**Features:**
 
-- fast, interactive search interface using
+- **fast, interactive** search interface using
   [fzf](https://github.com/junegunn/fzf)
-- synchronization across multiple terminals (_entries from current session stay
+- **synchronization** across multiple terminals (_entries from current session stay
   on top!_)
 - unlimited history (plus a command to remove duplicates)
-- automatic backup and protection against terminal crashes
+- automatic **backup** and protection against terminal crashes
 - convenient deleting of bad entries (so that you don't re-run a command with a
   typo)
 
@@ -30,8 +30,8 @@ Installation
         git clone https://github.com/jan-warchol/smart-bash-history.git
         echo 'source $HOME/smart-bash-history/01-main-settings.sh' >> ~/.bashrc
 
-2.  Download [fzf](https://github.com/junegunn/fzf-bin/releases) into
-    `smart-bash-history`. Assuming **64-bit Linux**:
+2.  [Download fzf](https://github.com/junegunn/fzf-bin/releases) into
+    `smart-bash-history`. **Assuming 64-bit Linux**:
 
         cd smart-bash-history
         wget https://github.com/junegunn/fzf-bin/releases/download/0.18.0/fzf-0.18.0-linux_amd64.tgz -O- | tar xz
