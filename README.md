@@ -41,6 +41,8 @@ Installation
 Usage
 -----
 
+![Example](./screencast.svg)
+
 Press `Ctrl-R` and start typing to interactively search history (you can
 use arrows). Confirm selection by pressing return. `history`
 command itself works the same as before.
