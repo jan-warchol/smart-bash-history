@@ -12,10 +12,8 @@ changed since then - time to catch up!
   on top!_)
 - unlimited history (plus a command to remove duplicates)
 - automatic **backup** and protection against terminal crashes
-- convenient deleting of bad entries (so that you don't re-run a command with a
-  typo)
 
-All of this using less than 150 lines of shell script, without changing history
+All of this using less than 100 lines of shell script, without changing history
 file format.
 
 
@@ -50,11 +48,6 @@ command itself works the same as before.
 To filter your history file, removing trivial commands and keeping only one
 occurrence of each entry, run `filter_bash_history`.
 
-To remove entries that include `rm -rf foobar`:
-
-    hrm rm -rf foobar
-
-(mnemonic: History ReMove).
 
 
 ### Gotchas
