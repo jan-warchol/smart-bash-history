@@ -21,4 +21,3 @@ source $repo_root/backup.sh
 source $repo_root/fuzzy-search.sh
 source $repo_root/synchronization.sh
 source $repo_root/filtering.sh
-source $repo_root/entry-pruning.sh
