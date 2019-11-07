@@ -26,7 +26,7 @@ Installation
     users should update `~/.bash_profile` instead of `~/.bashrc`):
 
         git clone https://github.com/jan-warchol/smart-bash-history.git
-        echo 'source $HOME/smart-bash-history/01-main-settings.sh' >> ~/.bashrc
+        echo "source $PWD/smart-bash-history/01-main-settings.sh" >> ~/.bashrc
 
 2.  [Download fzf](https://github.com/junegunn/fzf-bin/releases) into
     `smart-bash-history`. **Assuming 64-bit Linux**:
