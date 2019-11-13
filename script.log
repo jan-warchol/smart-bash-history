@@ -1,0 +1,112 @@
+Script started on 2019-11-08 08:37:22+0100
+(B[m(B[m(B[m(B[m(B[m(B[m[36m~/src/smart-bash-history[0m (master u=)
+$ [1;37mtmux
+(B[m[?1049h[22;0;0t[?1h=[H[2J[?12l[?25h[?1000l[?1002l[?1006l[?1005l[c(B[m[?12;25h[?12l[?25h[?1003l[?1006l[?2004l[1;1H[1;22r]112[1;1H[?1006h[?1002h[?25l[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[30m[42m[3] 0:bash*                                          "jw-lat7280" 08:37 08-Nov-19(B[m[1;1H[?12l[?25h(B[m[?12;25h[?12l[?25h[?1003l[?1006l[?2004l[1;1H[1;22r[1;1H[?1006h[?1002h[?25l[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[30m[42m[3] 0:bash*                                          "jw-lat7280" 08:37 08-Nov-19(B[m[1;1H[?12l[?25h[36m~/src/smart-bash-history[39m (master u=)
+$ [?25l[1;41H│[2;41H│[3;41H│[4;41H│[5;41H│[6;41H│[7;41H│[8;41H│[9;41H│[10;41H│[11;41H│[32m[12;41H│[13;41H│[14;41H│[15;41H│[16;41H│[17;41H│[18;41H│[19;41H│[20;41H│[21;41H│[H(B[m[36m~/src/smart-bash-history[39m (master u=)[4X[2;40H[1K$[3;40H[1K
+[1K
+[1K
+[1K
+[1K
+[1K
+[1K
+[1K
+[1K
+[1K
+[1K
+[1K
+[1K
+[1K
+[1K
+[1K
+[1K
+[1K
+[1K[1;42H[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[30m[42m[3] 0:bash*                                          "jw-lat7280" 08:37 08-Nov-19(B[m[1;42H[?12l[?25h[2;40H[1K[37m[1m$ [1;42H(B[m[36m~/src/smart-bash-history[39m (master u=)[2;42H$ [37m[1ml(B[m[37m[1ms(B[m[3;42H01-main-settings.sh  screencast-todo.md[4;42Hbackup.sh            script.log[5;42Hfiltering.sh         synchronization.sh[6;42Hfuzzy-search.sh      timing.txt[7;42HREADME.md            typescript[8;42Hscreencast.sh[9;42H[36m~/src/smart-bash-history[39m (master u=)[10;42H$ [37m[1m (B[m[K[37m[1m`(B[m[37m[1m__history_fzf(B[m[37m[1m_se(B[m[37m[1mar(B[m[37m[1mc(B[m[37m[1mh(B[m[37m[1m (B[m[37m[1m `(B[m[1;21r[11;42H[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K[10;68H[K[1;22r[10;68H[11;42H                                        [11;42H[31m[40m[1m (B[m ls -a[12;42H                                        [12;42H[31m[40m[1m (B[m ls -h[13;42H                                        [13;42H[31m[40m[1m (B[m tmux[14;42H                                        [14;42H[31m[40m[1m (B[m script typescript [15;42H                                        [15;42H[31m[40m[1m (B[m script [16;42H                                        [16;42H[31m[40m[1m (B[m man script[17;42H                                        [17;42H[31m[40m[1m (B[m vim typescript [18;42H                                        [18;42H[31m[40m[1m>[33m scriptreplay typescript [19;42H(B[m                                        [19;42H                                        [19;44H[37m37/37 +S[10D[39m                                        [19;44H[37m37/37 +S[20;42H[39m                                        [20;42H                                        [20;42H[34m[1m> (B[m                                        [20;42H[34m[1m> [39ms(B[m[11;42H[31m[40m[1m (B[m cd [32ms[39mrc/smart-bash-history/[12;42H[31m[40m[1m (B[m ..-chrome /tmp/termtosvg_v4e6zg0x.[32ms[39mvg[13;42H[31m[40m[1m (B[m cd [32ms[39mrc/smart-bash-history/[14;42H[31m[40m[1m (B[m git [32ms[39mtatus        [15;42H[31m[40m[1m (B[m [32ms[39mcript typescript [16;42H[31m[40m[1m (B[m [32ms[39mcript    [17;42H[31m[40m[1m (B[m man [32ms[39mcript     [18;42H[31m[40m[1m>[33m [32ms[33mcriptreplay typescript [19;42H(B[m                                        [19;44H[37m19/37 +S[20;45H(B[m[3D                                        [20;42H[34m[1m> [39msc(B[m[11;42H                                        [12;42H[31m[40m[1m (B[m vim type[32msc[39mript                       [13;42H[31m[40m[1m (B[m cd [32ms[39mr[32mc[39m/smart-bash-history/[14;42H[31m[40m[1m (B[m cd [32ms[39mr[32mc[39m/smart-bash-history/[15;42H[31m[40m[1m (B[m [32msc[39mript typescript [16;42H[31m[40m[1m (B[m [32msc[39mript [17;42H[31m[40m[1m (B[m man [32msc[39mript[18;42H[31m[40m[1m>[33m [32msc[33mriptreplay typescript [19;42H(B[m                                        [19;44H[37m7/37 +S[20;46H(B[m[4D                                        [20;42H[34m[1m> [39mscr(B[m[12;42H[31m[40m[1m (B[m cd [32ms[39mr[32mc[39m/sma[32mr[39mt-bash-history/[13;42H[31m[40m[1m (B[m cd [32ms[39mr[32mc[39m/sma[32mr[39mt-bash-history/[14;42H[31m[40m[1m (B[m vim type[32mscr[39mipt            [15;42H[31m[40m[1m (B[m [32mscr[39mipt typescript [16;42H[31m[40m[1m (B[m [32mscr[39mipt [17;42H[31m[40m[1m (B[m man [32mscr[39mipt[18;42H[31m[40m[1m>[33m [32mscr[33miptreplay typescript [19;42H(B[m                                        [19;44H[37m7/37 +S[20;47H(B[m[12;42H[31m[40m[1m (B[m cd [32ms[39mr[32mc[39m/sma[32mr[39mt-bash-history/[13;42H[31m[40m[1m (B[m cd [32ms[39mr[32mc[39m/sma[32mr[39mt-bash-history/[14;42H[31m[40m[1m (B[m vim type[32mscr[39mipt [15;42H[31m[40m[1m (B[m [32mscr[39mipt typescript [16;42H[31m[40m[1m (B[m [32mscr[39mipt [17;42H[31m[40m[1m (B[m man [32mscr[39mipt[18;42H[31m[40m[1m>[33m [32mscr[33miptreplay typescript [19;42H(B[m                                        [19;44H[37m7/37 +S[20;42H[39m                                        [20;42H[34m[1m> [39mscr (B[m[6D                                        [20;42H[34m[1m> [39mscr v(B[m[12;42H                                        [13;42H                                        [14;42H                                        [15;42H                                        [16;42H                                        [17;42H                                        [18;42H[31m[40m[1m>[33m [32mv[33mim type[32mscr[33mipt (B[m         [19;42H                                        [19;44H[37m1/37 +S[20;49H(B[m[7D                                        [20;42H[34m[1m> [39mscr vi(B[m[18;42H[31m[40m[1m>[33m [32mvi[33mm type[32mscr[33mipt [19;42H(B[m                                        [19;44H[37m1/37 +S[20;50H(B[m[8D                                        [20;42H[34m[1m> [39mscr vii(B[m[18;42H[31m[40m[1m>[33m [32mvi[33mm type[32mscri[33mpt [19;42H(B[m                                        [19;44H[37m1/37 +S
+(B[m[1;21r[11;42H[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K[10d[K[1;22r[10;42H[?25l[K[K$ [37m[1mvim typescript[?12l[?25h(B[m[1;22r(B[m[?1l>[H[2J]112[?12l[?25h[?1000l[?1002l[?1006l[?1005l[?1049l[23;0;0t[detached (from session 3)]
+(B[mf(B[m[36m~/src/smart-bash-history[0m (master u=)
+$ [1;37mf[Kexit
+(B[mFlushing .bash_history.25086
+
+Script done on 2019-11-08 08:37:39+0100
