@@ -9,6 +9,6 @@ if [[ -e $HISTBACKUP && $histfile_size -lt $histbackup_size ]]; then
     echo
     echo Refusing to overwrite backup file.
   else  # update backup
-    [ -e $HISTFILE ] && cp $HISTFILE $HISTBACKUP
+    [ -e $HISTFILE ] && rm -f $HISTBACKUP && cp $HISTFILE $HISTBACKUP
 fi
 

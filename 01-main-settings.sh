@@ -15,7 +15,7 @@ export HISTORY_IGNORE="(?|ls|la|ll|fg|hrn}"
 # load remaining history configuration files (must use full path)
 repo_root=$(dirname $0)
 export PATH="$PATH:$repo_root"
-# source $repo_root/backup.sh
+source $repo_root/backup.sh
 # source $repo_root/fuzzy-search.sh
 # source $repo_root/synchronization.sh
 # source $repo_root/filtering.sh
