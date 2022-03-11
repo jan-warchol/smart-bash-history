@@ -19,7 +19,7 @@ filter_bash_history() {
 
   # remove trivial commands
   sed -r '/^#[0-9]* .{,6}$/d' |
-  sed -r '/^#[0-9]* [a-Z0-9 _/.]{,12}$/d' |
+  sed -r '/^#[0-9]* [a-zA-Z0-9 _/.]{,12}$/d' |
 
   # sort by timestamp
   sort --stable --key=1,1 |
