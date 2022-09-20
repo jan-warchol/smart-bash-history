@@ -28,11 +28,12 @@ Installation
         git clone https://github.com/jan-warchol/smart-bash-history.git
         echo "source $PWD/smart-bash-history/01-main-settings.sh" >> ~/.bashrc
 
-2.  [Download fzf](https://github.com/junegunn/fzf-bin/releases) into
-    `smart-bash-history`. **Assuming 64-bit Linux**:
+2.  [Install fzf](https://github.com/junegunn/fzf#installation).
+    **Assuming 64-bit Linux,** you can get the latest version with:
 
         cd smart-bash-history
-        wget https://github.com/junegunn/fzf-bin/releases/download/0.18.0/fzf-0.18.0-linux_amd64.tgz -O- | tar xz
+        version=$(curl -s "https://api.github.com/repos/junegunn/fzf/releases/latest" | jq .tag_name -r)
+        curl -sL https://github.com/junegunn/fzf/releases/download/${version}/fzf-${version}-linux_amd64.tar.gz | tar xz
 
 3.  New shell sessions should have smart history enabled.
 
