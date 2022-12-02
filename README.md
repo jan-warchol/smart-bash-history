@@ -32,7 +32,7 @@ Installation
     `smart-bash-history`. **Assuming 64-bit Linux**:
 
         cd smart-bash-history
-        wget https://github.com/junegunn/fzf-bin/releases/download/0.18.0/fzf-0.18.0-linux_amd64.tgz -O- | tar xz
+        wget https://github.com/junegunn/fzf/releases/download/0.29.0/fzf-0.29.0-linux_amd64.tar.gz -O- | tar xz
 
 3.  New shell sessions should have smart history enabled.
 
