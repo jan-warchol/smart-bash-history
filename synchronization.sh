@@ -31,7 +31,25 @@ flush_current_session_history() { __merge_history_file "${HISTFILE}.$$"; }
 trap flush_current_session_history EXIT
 
 # detect leftover files from crashed sessions and merge them back
-active_shells=$(pgrep `ps -p $$ -o comm=`)
+# Login shells report comm as -bash. pgrep treats that leading dash as an option.
+__shell_basename() {
+  name=$1
+  name=${name//[[:space:]]/}
+  name=${name#-}
+  name=${name##*/}
+  printf '%s\n' "$name"
+}
+
+__active_shell_pids() {
+  wanted=$(__shell_basename "$(ps -p $$ -o comm=)")
+  ps -x -o pid=,comm= | while read -r pid comm; do
+    if [ "$(__shell_basename "$comm")" = "$wanted" ]; then
+      printf '%s\n' "$pid"
+    fi
+  done
+}
+
+active_shells=$(__active_shell_pids)
 grep_pattern=$(for pid in $active_shells; do echo -n "-e \.${pid}\$ "; done)
 orphaned_files=$(ls $HISTFILE.[0-9]* 2>/dev/null | grep -v $grep_pattern)
 
