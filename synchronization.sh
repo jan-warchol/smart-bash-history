@@ -15,7 +15,11 @@ __reload_history () {
   done
 }
 if [[ "$PROMPT_COMMAND" != *__reload_history* ]]; then
-  export PROMPT_COMMAND="__reload_history; $PROMPT_COMMAND"
+  # Do NOT export PROMPT_COMMAND: it is a per-shell hook, not an environment
+  # variable. Exporting it leaks the hook (and any functions it references)
+  # into child processes such as the tmux server, where those functions are
+  # undefined - producing "command not found" on every prompt.
+  PROMPT_COMMAND="__reload_history${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
 fi
 
 # append provided file to main history
